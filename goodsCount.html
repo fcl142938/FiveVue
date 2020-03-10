@@ -1,282 +1,119 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-<link href="css/common.css" rel="stylesheet" type="text/css" />
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-</head>
-<style>
-	.el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: center;
-    line-height: 0px;
-}
-.el-table td, .el-table th {
-    padding: 6px 0;
-    min-width: 0;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    position: relative;
-    text-align: left;
-}
-  .el-table .warning-row {
-    background: oldlace;
-  }
 
-  .el-table .success-row {
-    background: #f0f9eb;
-  }
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>无标题文档</title>
+	</head>
+	<style>
+		h1 {
+			text-align: center;
+		}
+	</style>
 
-</style>
-<body>
-<div class="wrap" id="goodsCount">
-<!-- main begin-->
-<h1>拍卖结束的商品</h1>
-<template>
-   <el-table
-   	
-stripe   	
-   		 height="150"
-    :data="goods"
-    border
-    style="width: 100%">
-    <el-table-column
-      prop="nameMC"
-      label="名称"
-      width="180">
-    </el-table-column>
+	<body>
+		<div class="wrap" id="goodsCount">
+			<h1>拍卖结束的商品</h1>
+			<el-table stripe height="150" :data="pageinfo1.list" border style="width: 100%">
+				<el-table-column prop="warname" label="名称" width="180">
+				</el-table-column>
 
-    <el-table-column
-      prop="startDate"
-      label="开始时间">
-    </el-table-column>
-    
-    <el-table-column
-      prop="endDate"
-      label="结束时间">
-    </el-table-column>
-    <el-table-column
-      prop="price"
-      label="起拍价">
-    </el-table-column>
-   <el-table-column
-      prop="priceOk"
-      label="成交价"
-      width="180">
-    </el-table-column>
-        <el-table-column
-        	     align="center"
-      label="买家"
-      width="180">
-      <template slot-scope="temp">
-      	<span style="color: red;">{{temp.row.user}}</span>
-      </template>
-    </el-table-column>
-      </template>
-      
-  <h1>拍卖中的商品</h1>
+				<el-table-column prop="starttime" label="开始时间">
+				</el-table-column>
 
-<template>
+				<el-table-column prop="endtime" label="结束时间">
+				</el-table-column>
+				<el-table-column prop="startprice" label="起拍价">
+				</el-table-column>
+				<el-table-column prop="floorprice" label="成交价" width="180">
+				</el-table-column>
+				<el-table-column align="center" label="买家" width="180">
+					<template slot-scope="temp">
+						<span style="color: red;">{{temp.row.uname}}</span>
+					</template>
+				</el-table-column>
+			</el-table>
+			<h1>拍卖中的商品</h1>
 
-  <el-table
-  	:row-class-name="tableRowClassName"
-    :data="goodsNotes"
-    style="width: 100%">
-    <el-table-column type="expand">
-      <template slot-scope="props">
-      	
-   <el-table 	
-			stripe   	
-   		 height="250"
-    :data="props.row.notes"
-    border
-    style="width: 362px">
-    <el-table-column label="竞拍出价记录">
-    <el-table-column
-      prop="user"
-      label="竞拍人"
-      width="180">
-    </el-table-column>
-   <el-table-column
-      prop="price"
-      label="竞拍价"
-      width="180">
-   </el-table-column>
-   </el-table>
-      </template>
-    </el-table-column>
-    <el-table-column
-      label="名称"
-      prop="nameMC">
-    </el-table-column>
-    <el-table-column
-      label="开始时间"
-      prop="startDate">
-    </el-table-column>
-    <el-table-column
-      label="结束时间"
-      prop="endDate">
-    </el-table-column>
-      <el-table-column
-      label="起拍价"
-      prop="price">
-    </el-table-column>
-  </el-table>
-</template>
- <div class="block" style="margin-top: 2ex;text-align: center;">
- 
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="1"
-      :page-sizes="[2,3,6]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total=goodsNotes.length>
-    </el-pagination>
-  </div>
+			<el-table :row-class-name="tableRowClassName" :data="pageinfo.list" style="width: 100%">
+				<el-table-column type="expand">
+					<template slot-scope="props">
+						<el-table stripe height="250" :data="props.row.list" border style="width: 362px">
+							<el-table-column label="竞拍出价记录">
+								<el-table-column prop="uname" label="竞拍人" width="180">
+								</el-table-column>
+								<el-table-column prop="price" label="竞拍价" width="180">
+								</el-table-column>
+						</el-table>
+					</template>
+					</el-table-column>
+					<el-table-column label="名称" prop="warname">
+					</el-table-column>
+					<el-table-column label="开始时间" prop="starttime">
+					</el-table-column>
+					<el-table-column label="结束时间" prop="endtime">
+					</el-table-column>
+					<el-table-column label="起拍价" prop="startprice">
+					</el-table-column>
+			</el-table>
+			<div class="block" style="margin-top: 2ex;text-align: center;">
 
-<!-- main end-->
-</div>
-</body>
-<script>
-  var Main={
-  	  methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-      	/*这里是用来分页  参数val是当前页*/
-        console.log(`当前页: ${val}`);
-      },
-           tableRowClassName({row, rowIndex}) {
-        if (rowIndex === 1) {
-          return 'success-row';
-        } else if (rowIndex === 3) {
-          return 'success-row';
-        }else if (rowIndex === 5) {
-          return 'success-row';
-        }
-        return '';
-      }
-      },
-    data() {
-      return {
-        goods:[
-        {
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					priceOk:2000,
-					user:"张三"
-        },
-        {
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					priceOk:2000,
-					user:"张三"
-        },
-        {
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					priceOk:2000,
-					user:"张三"
-        },
-        {
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					priceOk:2000,
-					user:"张三"
-        },
-        {
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					priceOk:2000,
-					user:"张三"
-        }
-        
-        ],
-        goodsNotes:[
-         {
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					notes:[{user:"李四12333",price:2000},{user:"李四12312312",price:2000}]
-        },{
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-	notes:[{user:"李四",price:2000},{user:"李四",price:2000},{user:"李四",price:2000}]
-        },{
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					notes:[{user:"李四2",price:2000},{user:"李四2",price:2000}]
-        },{
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-						notes:[{user:"李四3",price:2000},{user:"李四3",price:2000}]
-        },{
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					notes:[{user:"李四",price:2000},{user:"李四",price:2000}]
-        },{
-        	goodsId:1,
-          startDate: '2016-05-03',
-          endDate: '2016-05-03',
-          nameMS: '冥国脏鼠',
-          nameMC:'国书',
-					price:1000,
-					notes:[{user:"李四",price:2000},{user:"李四",price:2000}]
-        }
-        
-        ]
-      }
-    }
-  }
-  
-  var goodsCountApp=Vue.extend(Main);
-			new goodsCountApp().$mount("#goodsCount")
-</script>
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1" :page-sizes="[5,10,15]" :page-size="pageinfo.pageSize" layout="total, sizes, prev, pager, next, jumper" :total=pageinfo.total>
+				</el-pagination>
+			</div>
+
+			<!-- main end-->
+		</div>
+	</body>
+	<script>
+		var app = new Vue({
+			data: {
+				loading: true,
+				currentPage: "1",
+				pageSize: "5",
+				pageinfo: [],
+				pageinfo1: []
+			},
+			methods: {
+				handleSizeChange(val) {
+					this.pageSize = val;
+					this.loadData();
+				},
+				handleCurrentChange(val) {
+					this.currentPage = val;
+					this.loadData();
+				},
+				loadData() {
+					let _this = this;
+					_this.loading = true;
+					$.post(`http://127.0.0.1:8080/api/wares/queryTerm`, {
+						state: 1,
+						"status": 1,
+						"currentPage": _this.currentPage,
+						"pageSize": _this.pageSize
+					}, function(res) {
+						_this.pageinfo = res;
+						setTimeout(() => {
+							_this.loading = false;
+						}, 1000);
+					}, "json")
+				}
+			},
+			mounted() {
+				this.loadData();
+				setTimeout(() => {
+					this.loading = false;
+				}, 1000);
+
+				let _this = this;
+				$.post(`http://127.0.0.1:8080/api/wares/queryTerm`, {
+					state: 0,
+					"status":0,
+				}, function(res) {
+					_this.pageinfo1 = res;
+				}, "json")
+			}
+		}).$mount("#goodsCount");
+	</script>
 
 </html>

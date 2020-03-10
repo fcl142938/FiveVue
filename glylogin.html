@@ -9,43 +9,55 @@
 		<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
 		<script type="text/javascript" src="js/jq_ajax_config.js"></script>
 	</head>
-	
+
 	<style type="text/css">
-		body{
-			background: url(images/176883601953d6fbe75acde.jpg);
-			background-repeat: no-repeat;   //不重复
-    		background-size: 100% 100%;     // 满屏
+		body {
+			background: url(img/4fcdd39f657f8.jpg);
+			background-repeat: no-repeat; //不重复
+			background-size: 100% 100%; // 满屏
+			text-align: center;
 		}
+		/*.el-col {
+			margin: 0px auto;
+		}*/
+		
+		[class*=el-col-] {
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		
 		[v-cloak] {
-				display: none;
-			}
+			display: none;
+		}
 	</style>
 
 	<body>
-		<div id="adminLogin" style="background-color: white; " v-cloak>
-			<el-col :span="8" :offset="8" class="grid-content bg-purple" style="box-shadow: 0px 0px 3px gray;padding: 10px;margin-top: 60px;">
-				<div class="grid-content ">
-					<h4 style="color: gold;text-align: center;">拍卖管理员登录</h4>
-					<el-form ref="loginFrom" :model="loginfrom" :rules="loginRules" label-width="100px">
-						<el-form-item label="用户名：" prop="userName">
-							<el-col :span="16">
-								<el-input v-model="loginfrom.userName" placeholder="请输入管理员用户名"></el-input>
-							</el-col>
-						</el-form-item>
-						<el-form-item label="用户密码：" prop="userPwd">
-							<el-col :span="16">
-								<el-input v-model="loginfrom.userPwd" placeholder="请输入管理员密码"></el-input>
-							</el-col>
-						</el-form-item>
+		<div id="adminLogin" style="background: white;" v-cloak>
+			<el-col style="width:30%;margin-left:35%;margin-top:5%;background: white;">
+				<div>
+					<h4 style="color: gold;text-align: center;">拍卖登录</h4>
+					<el-col :offset="3">
+						<el-form ref="loginFrom" :model="loginfrom" :rules="loginRules" label-width="100px">
+							<el-form-item label="用户名：" prop="userName">
+								<el-col :span="16">
+									<el-input v-model="loginfrom.userName" placeholder="请输入管理员用户名"></el-input>
+								</el-col>
+							</el-form-item>
+							<el-form-item label="用户密码：" prop="userPwd">
+								<el-col :span="16">
+									<el-input v-model="loginfrom.userPwd" placeholder="请输入管理员密码"></el-input>
+								</el-col>
+							</el-form-item>
 
-						<el-checkbox style="margin-left: 70px;" label="记住密码" name="type"></el-checkbox>
+							<el-checkbox style="margin-left: 70px;" label="记住密码" name="type"></el-checkbox>
 
-						<el-form-item style="margin-top: 20px">
-							<el-button type="success" @click="login">登录</el-button>
-							<el-button type="primary" @click="zhuce">注册</el-button>
-							<a href="#" style="margin-left: 20px;vertical-align: bottom;line-height: 20px;color: red;">忘记密码</a>
-						</el-form-item>
-					</el-form>
+							<el-form-item style="margin-top: 20px">
+								<el-button type="success" @click="login">登录</el-button>
+								<el-button type="primary" @click="zhuce">注册</el-button>
+								<a href="#" style="margin-left: 20px;vertical-align: bottom;line-height: 20px;color: red;">忘记密码</a>
+							</el-form-item>
+						</el-form>
+					</el-col>
 				</div>
 			</el-col>
 			<el-dialog title="系统提示" :visible.sync="isShow1" width="30%">
@@ -73,52 +85,40 @@
 				loginRules: {
 					userName: [{
 						required: true,
-						message: '请输入名称',
+						message: '请输入用户名',
 						trigger: 'blur'
 					}],
 					userPwd: [{
 						required: true,
-						message: '请输入名称',
-						trigger: 'blur'
-					}],
-					auth: [{
-						validator: (rule, value, callback) => {
-							if(adminLogin.auth == "") {
-								callback(new Error('验证码不能为空'));
-							} else
-							if(adminLogin.blur()) {
-								callback(new Error('验证码错误'));
-							} else {
-								callback();
-							}
-						},
+						message: '请输入密码',
 						trigger: 'blur'
 					}]
 				}
 			},
 			methods: {
-				zhuce(){
-					location.href='jplogin.html';
-				},
-				blur() {
-					if(this.auth == "7chrr") {
-						return false;
-					}
-					return true;
+				zhuce() {
+					location.href = 'jplogin.html';
 				},
 				login() {
-			/*		if(this.blur()) {
-						return
-					}
 					this.$refs['loginFrom'].validate(valid => {
 						if(valid) {
-
+							let _this = this;
+							$.getJSON(`http://127.0.0.1:8080/api/user/login`, {
+								"userName": _this.loginfrom.userName,
+								"userPwd": _this.loginfrom.userPwd
+							}, function(res) {
+								if(res.power=="no"){
+									_this.$alert('用户名或密码错误！', '系统提示');
+								}else{
+									console.log(res)
+									window.sessionStorage.setItem("user",JSON.stringify(res));
+									location.href = "menu.html"
+								}
+							})
 						} else {
 							this.$alert('用户名或密码错误！', '系统提示');
 						}
-					});*/
-					window.sessionStorage.setItem("power",this.loginfrom.userName);
-					location.href="work.html"
+					});
 				},
 				loginSub() {
 					isShow1 = false;

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>北大青鸟办公自动化管理系统</title>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="css/index.css" />
+		<style>
+			.el-header {
+				background: lightgray;
+				text-align: left;
+				font-size: 20px;
+				color: white;
+				line-height: 60px;
+			}
+			
+			* {
+				margin: 0;
+			}
+				
+				
+		</style>
+	</head>
+
+	<body>
+		<div id="MenuApp">
+			<el-container style='height:95vh'>
+				<el-header>{{tilte}}<span style="float: right;font-size: 15px;">
+					<span v-if="user.upower==1" >用户</span>
+					<span v-if="user.upower==0" >管理员</span>
+					：<span style="color: red;">{{user.uname}}</span>
+					<el-button type="danger" size="mini" @click="exit" style="">注销</el-button>
+					</span>
+				</el-header>
+				<el-container>
+					<el-aside width="250px" style="border: 1px  solid ghostwhite;margin: 20px;border-radius: 20px;">
+						<el-menu style="border-right:0">
+							<el-menu-item index="1" v-if="user.upower==1" @click="showView('zhuye.html')"><i class="el-icon-menu"></i>
+								<span slot="title" >竞拍首页</span></el-menu-item>
+							<el-menu-item index="2" v-if="user.upower==1" @click="showView('goodsCount.html')"><i class="el-icon-s-data"></i>
+								<span slot="title">竞拍数据</span></el-menu-item>
+							<el-submenu index="3" v-if="user.upower==0">
+								<template slot="title">
+									<i class="el-icon-setting"></i>
+									<span>竞拍系统管理</span>
+								</template>
+								<el-menu-item-group>
+									<el-menu-item index="3-2" @click="showView('goodsGLiList.html')"><i class="el-icon-receiving"></i>竞拍商品管理</el-menu-item>
+									<el-menu-item index="3-1" @click="showView('goodsAdd.html')"><i class="el-icon-receiving"></i>竞拍商品发布</el-menu-item>
+								</el-menu-item-group>
+							</el-submenu>
+						</el-menu>
+					</el-aside>
+					<el-main style="border-left: 1px ghostwhite solid;">
+						<div id="cnt">
+							<h1 style="text-align: center;line-height: 100px;">欢迎使用拍卖系统</h1>
+						</div>
+					</el-main>
+				</el-container>
+			</el-container>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript" src="js/jq_ajax_config.js"></script>
+	<script type="text/javascript">
+		var app = new Vue({
+			data: {
+				user: JSON.parse(window.sessionStorage.getItem("user")),
+				tilte: "在线拍卖系统"
+			},
+			methods: {
+				showView(url) {
+					$('#cnt').load(url);
+				},
+				exit() {
+					this.$confirm('退出登录, 是否继续?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						$.post(`http://127.0.0.1:8080/api/user/exit`, function(res) {
+							location.href = "glylogin.html";
+						})
+					});
+				}
+			},
+			mounted() {
+					if(this.user.upower == "0") {
+					this.tilte = "在线拍卖管理系统";
+				}
+			}
+		}).$mount("#MenuApp");
+
+	</script>
+
+</html>
